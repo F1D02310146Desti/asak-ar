@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     
@@ -10,31 +9,35 @@
     <script src="https://raw.githack.com/fcor/aframe-gesture-handler-component/master/dist/gesture-handler.min.js"></script>
 
     <style>
-      /* Fix tambahan agar video memenuhi layar dengan benar tanpa stretching */
+      /* PAKSA VIDEO AGAR TIDAK DI-CROP */
       #arjs-video {
-        object-fit: cover !important;
-        width: 100vw !important;
-        height: 100vh !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin-left: 0px !important;
+        top: 0px !important;
+        /* Ganti 'cover' ke 'contain' jika ingin melihat seluruh area kamera tanpa zoom sama sekali, 
+           tapi mungkin akan muncul bar hitam di pinggir jika rasio layar berbeda */
+        object-fit: cover !important; 
       }
+      body { margin: 0; overflow: hidden; }
     </style>
   </head>
 
-  <body style="margin: 0px; overflow: hidden;">
-    
+  <body>
     <a-scene 
       embedded 
+      /* KUNCINYA DI SINI: Hilangkan paksaan resolusi statis, biarkan browser yang atur */
       arjs="sourceType: webcam; 
-            displayWidth: 1280; 
-            displayHeight: 720; 
-            sourceWidth: 1280; 
-            sourceHeight: 720; 
-            debugUIEnabled: false;"
+            debugUIEnabled: false; 
+            trackingMethod: best;
+            sourceWidth: 640; 
+            sourceHeight: 480; 
+            displayWidth: 640; 
+            displayHeight: 480;"
       gesture-detector
-      vr-mode-ui="enabled: false"
-      id="scene">
+      vr-mode-ui="enabled: false">
 
       <a-marker type="pattern" url="tenun.patt">
-
         <a-entity
           id="model-3d"
           gltf-model="url(tenun.glb)"
@@ -42,12 +45,10 @@
           scale="0.5 0.5 0.5"
           class="clickable"
           gesture-handler>
-
         </a-entity>
       </a-marker>
 
-      <a-entity camera fov="80"></a-entity>
-      
+      <a-entity camera fov="60"></a-entity>
     </a-scene>
   </body>
 </html>
